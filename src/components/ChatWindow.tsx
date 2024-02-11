@@ -8,13 +8,19 @@ import { SparklesIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { usePathname } from 'next/navigation';
 
+interface Expert {
+  name: string;
+  description: string;
+  imageUrl: string;
+  initialPrompt: string;
+  initialAnswer: string;
+}
+
 export default function ChatWindow() {
-  const [expert, setExpert] = useState(null);
+  const [expert, setExpert] = useState<Expert | null>(null);
   const pathname = usePathname();
   const chatId = pathname && pathname.split('/').pop() || uuidv4();
-  const messagesEndRef = useRef(null);
-  const inputBarRef = useRef(null);
-  const [inputBarHeight, setInputBarHeight] = useState(0);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Autoscroll zum neuesten Nachricht
   const scrollToBottom = () => {
@@ -25,7 +31,7 @@ export default function ChatWindow() {
     // Auslesen der Expertendaten aus dem localStorage
     const expertData = localStorage.getItem('selectedExpert');
     if (expertData) {
-      setExpert(JSON.parse(expertData));
+      setExpert(JSON.parse(expertData) as Expert);
     }
   }, []);
 
@@ -54,14 +60,6 @@ export default function ChatWindow() {
     // Scrollen, wenn Nachrichten aktualisiert werden
     scrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    // Berechnen der Höhe des Input-Bars
-    if (inputBarRef.current) {
-      setInputBarHeight(inputBarRef.current.offsetHeight);
-    }
-  }
-  , [input]);
 
   // Speichert Nachrichten nach Abschluss der Chatbot-Antwort
   async function handleFinish(message: any) {
@@ -101,7 +99,6 @@ export default function ChatWindow() {
         {isLoading && <SparklesIcon className="h-6 text-blue-100 animate-spin mt-4 ml-8" />}
         {error && <div>Fehler: {error.message}</div>}
       </div>
-      <div ref={inputBarRef} />
       <InputBar
         input={input}
         handleInputChange={handleInputChange}

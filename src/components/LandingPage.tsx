@@ -4,9 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 
+interface Expert {
+  map(arg0: (expert: any, index: any) => React.JSX.Element): React.ReactNode;
+  name: string;
+  description: string;
+  imageUrl: string;
+  initialPrompt: string;
+  initialAnswer: string;
+}
+
 export default function LandingPage() {
   const router = useRouter();
-  const [experts, setExperts] = useState([]);
+  const [experts, setExperts] = useState<Expert | null>(null);
+
 
   useEffect(() => {
     fetch('/experts.json')
@@ -22,7 +32,7 @@ export default function LandingPage() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-white">
-      {experts.map((expert, index) => (
+      {experts && experts.map((expert, index) => (
         <div key={index} className="p-4 m-4 border rounded-lg cursor-pointer w-80 h-72 bg-slate-50 hover:bg-slate-100" onClick={() => startChatWithExpert(expert)}>
           <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 rounded-full mx-auto"/>
           <h3 className="mt-4 text-lg font-bold">{expert.name}</h3>
