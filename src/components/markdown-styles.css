@@ -1,0 +1,63 @@
+/* Stil für Überschriften */
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+h2 {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+/* Stil für Tabellen */
+table {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  width: 100%;
+  border-collapse: collapse; /* Tabellenlinien anzeigen */
+}
+
+th, td {
+  border: 1px solid #ddd; /* Tabellenzellen-Rahmen */
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2; /* Hintergrundfarbe für Kopfzeilen */
+  text-align: left;
+}
+
+/* Listenstil */
+ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+ol {
+  padding-left: 20px;
+  list-style-type: decimal;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+/* Bildstil */
+img {
+  max-width: 50%;
+  height: auto;
+}
+
+/* Code-Block Stil */
+pre {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+code {
+  font-family: monospace;
+  background-color: #eee;
+  padding: 2px 5px;
+  border-radius: 3px;
+}

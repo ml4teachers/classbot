@@ -1,0 +1,17 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": true
+      },
+      "previewLimit": 50,
+      "server": "ep-holy-paper-39578042-pooler.eu-central-1.postgres.vercel-storage.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "classbot-db",
+      "database": "verceldb",
+      "username": "default",
+      "password": "K9ZjvOR3JPoD"
+    }
+  ]
+}

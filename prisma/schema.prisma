@@ -1,0 +1,37 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  used_input_tokens Int @default(0)
+  used_output_tokens Int @default(0)
+  chats     Chat[]
+}
+
+model Chat {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  messages  Message[]
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id            Int      @id @default(autoincrement())
+  text          String
+  role          String   // "user" oder "assistant"
+  tokens        Int      @default(0)
+  createdAt     DateTime @default(now())
+  chatId        String
+  chat          Chat     @relation(fields: [chatId], references: [id])
+}
