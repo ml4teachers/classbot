@@ -10,6 +10,7 @@ const TokensContext = createContext({
   isLoading: true,
   error: null,
   updateTokens: () => {},
+  totalTokens: 0,
 });
 
 export const TokensProvider = ({ children }) => {
