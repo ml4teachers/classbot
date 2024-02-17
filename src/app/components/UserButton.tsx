@@ -58,7 +58,7 @@ export default function UserButton() {
          hover:bg-slate-100 border hover:shadow-sm
          ">
           <img className="h-5 mr-2" src="/microsoft.svg" alt="Microsoft Logo" />
-          <span>Anmelden mit Microsoft</span>
+          <span>Anmelden</span>
         </button>
       )}
     </div>
