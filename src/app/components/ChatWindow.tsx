@@ -7,6 +7,8 @@ import InputBar from './InputBar';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { usePathname } from 'next/navigation';
+import { useTokens } from '../context/TokensContext';
+
 
 interface Expert {
   name: string;
@@ -21,6 +23,8 @@ export default function ChatWindow() {
   const pathname = usePathname();
   const chatId = pathname && pathname.split('/').pop() || uuidv4();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { updateTokens } = useTokens();
+
 
   // Autoscroll zum neuesten Nachricht
   const scrollToBottom = () => {
@@ -68,6 +72,7 @@ export default function ChatWindow() {
       { chatId, text: message.content, role: 'assistant' },
     ];
     await saveMessages(messagesToSave);
+    await updateTokens();
   }
 
   // Speichert Nachrichten in der Datenbank
@@ -86,7 +91,7 @@ export default function ChatWindow() {
 
   return (
     <div className="flex flex-col h-full mx-auto max-w-screen-md mt-14 w-full">
-      {expert && <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 rounded-full mx-auto"/>}
+      {expert && <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mt-16 rounded-full mx-auto"/>}
       <div className="flex-grow overflow-y-scroll p-4 bg-white mb-12">
         {messages.map((m, index) => {
           if (index === 0 && m.role === 'user') return null;

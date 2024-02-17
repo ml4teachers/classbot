@@ -1,9 +1,10 @@
 // src/app/page.tsx
 
 import React from 'react';
-import ChatLayout from '../../ChatLayout';
-import ChatWindow from '../../../components/ChatWindow';
-import Header from '../../../components/Header';
+import ChatLayout from '../../components/ChatLayout';
+import ChatWindow from '../../components/ChatWindow';
+import Header from '../../components/Header';
+import { TokensProvider } from '../../context/TokensContext';
 
 
 
@@ -11,10 +12,12 @@ const Page: React.FC = () => {
   // Hier könntest du Zustände und Funktionen definieren, um Nachrichten zu verwalten
 
   return (
-    <ChatLayout>
-      <Header />
-      <ChatWindow />
-    </ChatLayout>
+    <TokensProvider>
+      <ChatLayout>
+        <Header />
+        <ChatWindow />
+      </ChatLayout>
+    </TokensProvider>
   );
 };
 

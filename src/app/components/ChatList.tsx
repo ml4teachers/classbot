@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import ChatListItem from './ChatListItem';
-import { useTokens } from '../hooks/useTokens';
+import { useTokens } from '../../hooks/useTokens';
 
 const ChatList = ( { onChatChange }: { onChatChange: any }, { handleChatSelection }: { handleChatSelection: any } ) => {
   const { totalTokens } = useTokens();

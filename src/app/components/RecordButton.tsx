@@ -41,7 +41,7 @@ const RecordButton: React.FC<RecordButtonProps> = ({ onAudioRecorded }) => {
 
   return (
     <div
-      className={`w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-100 text-gray-500 m-1 ${
+      className={`w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-slate-200 text-gray-500 hover:text-gray-700 m-1 ${
         isRecording ? 'bg-gray-300 text-gray-800' : ''
       }`}
       onMouseDown={startRecording}

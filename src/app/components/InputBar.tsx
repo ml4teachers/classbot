@@ -67,13 +67,13 @@ const InputBar: React.FC<InputBarProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 pb-8 right-0 w-full z-10 bg-white">
-    <form className="flex justify-between items-center w-full max-w-screen-md mx-auto left-0 right-0" onSubmit={handleSendMessage}>
-        <div className="flex-grow border rounded-3xl flex items-center">
+    <div className="fixed bottom-0 pb-8 right-0 w-full z-10 bg-white px-2 md:px-0">
+    <form className="flex justify-between items-end w-full max-w-screen-md mx-auto left-0 right-0" onSubmit={handleSendMessage}>
+        <div className="flex-grow border rounded-3xl flex items-end">
           <textarea
             ref={textareaRef}
             rows={1}
-            className="flex-1 resize-none ml-4 my-1 overflow-hidden focus:outline-none"
+            className="flex-1 resize-none ml-4 my-3 overflow-y-scroll max-h-96 focus:outline-none"
             placeholder="Schreibe eine Nachricht..."
             value={input}
             onChange={handleInputChange}
@@ -87,10 +87,13 @@ const InputBar: React.FC<InputBarProps> = ({
           <div className="flex items-center">
             <RecordButton onAudioRecorded={handleAudioTranscription} />
           </div>
+          {input.length > 0 &&
+          <button type="submit" className="m-1 p-2 rounded-full flex-shrink-0 text-gray-500 hover:text-gray-700 hover:bg-slate-200 justify-end">
+            <PaperAirplaneIcon className="w-6 h-6" />
+          </button>
+          }
         </div>
-        <button type="submit" className="ml-2 flex-shrink-0">
-          <PaperAirplaneIcon className="w-6 h-6" />
-        </button>
+        
       </form>
     </div>
   );  

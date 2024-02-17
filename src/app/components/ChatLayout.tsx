@@ -2,8 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, ReactNode } from 'react';
-import Header from '../components/Header';
-import ChatWindow from '../components/ChatWindow';
+import Header from './Header';
 
 interface ChatLayoutProps {
   children: ReactNode;
@@ -22,10 +21,9 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       <div className="flex">
         <main className="flex-1">
-          <ChatWindow />
+          {children}
         </main>
       </div>
     </div>
