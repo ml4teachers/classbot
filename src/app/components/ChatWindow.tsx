@@ -7,7 +7,7 @@ import InputBar from './InputBar';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { usePathname } from 'next/navigation';
-import { useTokens } from '../context/TokensContext';
+// import { useTokens } from '../context/TokensContext';
 
 
 interface Expert {
@@ -23,7 +23,7 @@ export default function ChatWindow() {
   const pathname = usePathname();
   const chatId = pathname && pathname.split('/').pop() || uuidv4();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { updateTokens } = useTokens();
+  // const { updateTokens } = useTokens();
 
 
   // Autoscroll zum neuesten Nachricht
@@ -72,7 +72,7 @@ export default function ChatWindow() {
       { chatId, text: message.content, role: 'assistant' },
     ];
     await saveMessages(messagesToSave);
-    await updateTokens();
+    // await updateTokens();
   }
 
   // Speichert Nachrichten in der Datenbank

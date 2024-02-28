@@ -1,11 +1,29 @@
 // components/UserButton.tsx
 
 import React, { useState, useEffect } from 'react';
-import { createSupabaseFrontendClient } from "@/utils/supabase";
+import { createClient } from "@/utils/supabase/client";
+import { User } from '@supabase/supabase-js';
+
 
 export default function UserButton() {
-  const supabase = createSupabaseFrontendClient();
-  const [user, setUser] = useState(null);
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
   
   const handleSignIn = async () => {
     await supabase.auth.signInWithOAuth({
@@ -19,28 +37,7 @@ export default function UserButton() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    setUser(null);
   };
-
-  useEffect(() => {
-    const checkSession = async () => {
-      if (!user) {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error) {
-          console.error('Fehler beim Abrufen der Session:', error);
-        } else {
-          setUser((prevState: any) => {
-            if (prevState === null) {
-              return user;
-            } else {
-              return prevState;
-            }
-          });
-        }
-      }
-    };
-    checkSession();
-  }, []);
 
   return (
     <div className="flex right-4 top-4">

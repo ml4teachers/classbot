@@ -1,23 +1,13 @@
 // src/app/ChatLayout.tsx
 "use client";
 
-import React, { useState, useEffect, ReactNode } from 'react';
-import Header from './Header';
+import React, { ReactNode } from 'react';
 
 interface ChatLayoutProps {
   children: ReactNode;
 }
 
 const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
-  const [isChatReset, setIsChatReset] = useState(false);
-
-  const handleNewChatClick = () => {
-    setIsChatReset(true);
-  };
-
-  const resetChat = () => {
-    setIsChatReset(false);
-  };
 
   return (
     <div className="min-h-screen bg-white">

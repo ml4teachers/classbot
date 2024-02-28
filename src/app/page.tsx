@@ -1,19 +1,15 @@
-// app/page.tsx
+// src/app/page.tsx
 
 import React from 'react';
-import LandingPage from "@/app/components/LandingPage"
-import Header from "@/app/components/Header"
-import ChatLayout from '@/app/components/ChatLayout';
-import ChatWindow from '@/app/components/ChatWindow';
-
+import LandingPage from "@/app/components/LandingPage";
+import Layout from '@/app/layout';
 
 const Page: React.FC = () => {
   return (
-    <ChatLayout>
-      <Header />
+    <Layout>
       <LandingPage />
-    </ ChatLayout>
-  )
+    </Layout>
+  );
 }
 
-export default Page
+export default Page;
