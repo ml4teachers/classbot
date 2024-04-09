@@ -1,5 +1,5 @@
 // src/app/ChatLayout.tsx
-"use client";
+
 
 import React, { ReactNode } from 'react';
 

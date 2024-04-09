@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import autosize from 'autosize';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import RecordButton from './RecordButton';
+import Link from 'next/link';
 
 
 interface InputBarProps {
@@ -24,16 +25,15 @@ const InputBar: React.FC<InputBarProps> = ({
 
   useEffect(() => {
     if (textareaRef.current) {
-      autosize(textareaRef.current); // Initialisieren von autosize beim ersten Render
-  
-      // Dieser Effekt wird jedes Mal aufgerufen, wenn sich der `input` ändert
+      autosize(textareaRef.current);
+
       return () => {
         if (textareaRef.current) {
-          autosize.update(textareaRef.current); // Update von autosize, wenn sich der Inhalt ändert
+          autosize.update(textareaRef.current);
         }
       };
     }
-  }, [input]); // Abhängigkeiten-Array enthält `input`, sodass der Effekt bei Änderung ausgeführt wird
+  }, [input]);
   
 
   const handleAudioTranscription = async (audioBlob: Blob) => {
@@ -67,7 +67,7 @@ const InputBar: React.FC<InputBarProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 pb-8 right-0 w-full z-10 bg-white px-2 md:px-0">
+    <div className="fixed bottom-0 pb-2 right-0 w-full z-10 bg-white px-2 md:px-0">
     <form className="flex justify-between items-end w-full max-w-screen-md mx-auto left-0 right-0" onSubmit={handleSendMessage}>
         <div className="flex-grow border rounded-3xl flex items-end">
           <textarea
@@ -95,6 +95,11 @@ const InputBar: React.FC<InputBarProps> = ({
         </div>
         
       </form>
+      <p className="text-center text-xs text-gray-400 mt-2">
+          Classbot kann Fehler machen. Teile keine persönlichen Informationen. Weitere Informationen findest du
+          <Link href="/about" className="text-blue-600 visited:text-purple-600"> hier</Link>
+          .
+        </p>
     </div>
   );  
 };
