@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/RecordButton.tsx", "src/app/components/RecordButton.tsx", "pages/api/messages.ts", "src/utils/supabaseAppRouterClient.ts", "src/app/context/TokensContext.js", "src/app/context/AuthContext.tsx", "src/app/api/chat/route.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/RecordButton.tsx", "src/app/components/RecordButton.tsx", "pages/api/messages.ts", "src/utils/supabaseAppRouterClient.ts", "src/app/context/TokensContext.js", "src/app/context/AuthContext.tsx", "src/app/api/chat/openai.ts"],
   "exclude": ["node_modules"]
 }

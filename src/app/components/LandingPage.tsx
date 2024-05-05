@@ -63,15 +63,16 @@ export default function LandingPage() {
     <h1 className="text-4xl font-bold text-center mt-24 md:mt-36">Willkommen bei classbot.ch</h1>
     <div className="flex flex-col items-center mt-8 px-4">
       <p className="text-center mb-8 max-w-2xl">
-            Hier kannst du dich mit virtuellen Expertenbots austauschen, die mit einem grossen Sprachmodell trainiert wurden,
-            um auf deine Fragen zu antworten. Denke daran, dass die Bots auf Algorithmen basieren und Fehler machen können!</p>
+            Hier kannst du dich mit virtuellen Lernbots austauschen, die auf einem grossen Sprachmodell basieren.
+            Sie wurden darauf programmiert, auf deine Fragen zu antworten und dir beim Lernen zu helfen.
+            Denke daran, dass die Bots auf Algorithmen basieren und Fehler machen können.</p>
       {user ? (
         <>
-          <p className="text-center m-4 pb-8">Wähle einen Experten aus, um das Gespräch zu beginnen:</p>
+          <p className="text-center m-4 pb-8">Was möchtest du heute tun? Wie kann ich dir beim Lernen helfen?</p>
           <div className="flex flex-wrap justify-center items-center bg-white">
             {experts.map((expert, index) => (
-              <div key={index} className="p-4 m-4 border rounded-lg cursor-pointer w-80 bg-slate-50 hover:bg-slate-100 min-h-80" onClick={() => startChatWithExpert(expert)}>
-                <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 rounded-full mx-auto"/>
+              <div key={index} className="p-4 m-4 rounded-lg cursor-pointer w-80 min-h-80" onClick={() => startChatWithExpert(expert)}>
+                <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mx-auto"/>
                 <h3 className="mt-4 text-lg font-bold text-center">{expert.name}</h3>
                 <p className="text-sm text-center">{expert.description}</p>
               </div>

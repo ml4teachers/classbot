@@ -50,7 +50,7 @@ const Header: React.FC = () => {
           onClick={() => router.back()}
           className="text-sm sm:block mr-6 text-slate-500 hover:text-slate-800"
         >
-          Experte wechseln
+          Bot wechseln
         </button>
       )}
       { // user && totalTokens !== undefined &&

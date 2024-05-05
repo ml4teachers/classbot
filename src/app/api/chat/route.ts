@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     messages,
     model: 'claude-3-haiku-20240307',
     stream: true,
-    max_tokens: 300,
+    max_tokens: 400,
   });
  
   // Convert the response into a friendly text-stream

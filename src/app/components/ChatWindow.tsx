@@ -91,7 +91,7 @@ export default function ChatWindow() {
 
   return (
     <div className="flex flex-col h-full mx-auto max-w-screen-md mt-14 w-full">
-      {expert && <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mt-16 rounded-full mx-auto"/>}
+      {expert && <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mt-16 mx-auto"/>}
       <div className="flex-grow overflow-y-scroll p-4 bg-white mb-12">
         {messages.map((m, index) => {
           if (index === 0 && m.role === 'user') return null;
