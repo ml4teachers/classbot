@@ -1,3 +1,5 @@
+// src/app/components/ChatWindow.tsx
+
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -7,6 +9,7 @@ import InputBar from './InputBar';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { usePathname } from 'next/navigation';
+import ImageUpload from './ImageUpload';
 // import { useTokens } from '../context/TokensContext';
 
 
@@ -58,6 +61,7 @@ export default function ChatWindow() {
     isLoading,
     error,
     setInput,
+    setMessages,
   } = useChat(chatOptions);
 
   useEffect(() => {
@@ -88,10 +92,24 @@ export default function ChatWindow() {
     }
   }
 
+  const handleSendImage = (imageMessage: any) => {
+    console.log('Image Message:', imageMessage);
+    setMessages(imageMessage);
+    handleSubmit({ preventDefault: () => {} } as any);  // Simuliert einen Submit Event
+  };
+
 
   return (
     <div className="flex flex-col h-full mx-auto max-w-screen-md mt-14 w-full">
-      {expert && <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mt-16 mx-auto"/>}
+      {expert && (
+        <>
+          {expert.name === 'Code' ? (
+            <ImageUpload onSendImage={handleSendImage} />
+          ) : (
+            <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mt-16 mx-auto" />
+          )}
+        </>
+      )}
       <div className="flex-grow overflow-y-scroll p-4 bg-white mb-12">
         {messages.map((m, index) => {
           if (index === 0 && m.role === 'user') return null;

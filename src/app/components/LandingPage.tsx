@@ -63,7 +63,7 @@ export default function LandingPage() {
     <h1 className="text-4xl font-bold text-center mt-24 md:mt-36">Willkommen bei classbot.ch</h1>
     <div className="flex flex-col items-center mt-8 px-4">
       <p className="text-center mb-8 max-w-2xl">
-            Hier kannst du dich mit virtuellen Lernbots austauschen, die auf einem grossen Sprachmodell basieren.
+            Hier kannst du dich mit virtuellen Lernbots der Stadtschulen Zug austauschen, die auf einem grossen Sprachmodell basieren.
             Sie wurden darauf programmiert, auf deine Fragen zu antworten und dir beim Lernen zu helfen.
             Denke daran, dass die Bots auf Algorithmen basieren und Fehler machen können.</p>
       {user ? (
