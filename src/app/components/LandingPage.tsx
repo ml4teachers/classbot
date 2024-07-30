@@ -9,7 +9,7 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from '@supabase/supabase-js';
 import UserButton from './UserButton';
 import Link from 'next/link';
-
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
 interface Expert {
   map(arg0: (expert: any, index: any) => React.JSX.Element): React.ReactNode;
@@ -24,17 +24,36 @@ interface Expert {
 export default function LandingPage() {
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
+  const [isAllowed, setIsAllowed] = useState<boolean>(false);
   const router = useRouter();
   const [experts, setExperts] = useState<Expert[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user || null);
+      const loggedInUser = data.session?.user || null;
+      setUser(loggedInUser);
+      if (loggedInUser) {
+        const email = loggedInUser.email;
+        if (email) {
+          const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch'];
+          const domain = email.substring(email.lastIndexOf('@'));
+          setIsAllowed(allowedDomains.includes(domain));
+        }
+      }
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        setUser(session?.user || null);
+        const loggedInUser = session?.user || null;
+        setUser(loggedInUser);
+        if (loggedInUser) {
+          const email = loggedInUser.email;
+          if (email) {
+            const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch'];
+            const domain = email.substring(email.lastIndexOf('@'));
+            setIsAllowed(allowedDomains.includes(domain));
+          }
+        }
       }
     );
 
@@ -57,42 +76,48 @@ export default function LandingPage() {
     router.push(`/chats/${chatId}`);
   };
 
-  
   return (
-  <div>
-    <h1 className="text-4xl font-bold text-center mt-24 md:mt-36">Willkommen bei classbot.ch</h1>
-    <div className="flex flex-col items-center mt-8 px-4">
-      <p className="text-center mb-8 max-w-2xl">
-            Hier kannst du dich mit virtuellen Lernbots der Stadtschulen Zug austauschen, die auf einem grossen Sprachmodell basieren.
-            Sie wurden darauf programmiert, auf deine Fragen zu antworten und dir beim Lernen zu helfen.
-            Denke daran, dass die Bots auf Algorithmen basieren und Fehler machen können.</p>
-      {user ? (
-        <>
-          <p className="text-center m-4 pb-8">Was möchtest du heute tun? Wie kann ich dir beim Lernen helfen?</p>
-          <div className="flex flex-wrap justify-center items-center bg-white">
-            {experts.map((expert, index) => (
-              <div key={index} className="p-4 m-4 rounded-lg cursor-pointer w-80 min-h-80" onClick={() => startChatWithExpert(expert)}>
-                <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mx-auto"/>
-                <h3 className="mt-4 text-lg font-bold text-center">{expert.name}</h3>
-                <p className="text-sm text-center">{expert.description}</p>
+    <div>
+      <h1 className="text-4xl font-bold text-center mt-24 md:mt-36">Willkommen bei classbot.ch</h1>
+      <div className="flex flex-col items-center mt-8 px-4">
+        <p className="text-center mb-8 max-w-2xl">
+          Hier kannst du dich mit virtuellen Lernbots der Stadtschulen Zug austauschen, die auf einem grossen Sprachmodell basieren.
+          Sie wurden darauf programmiert, auf deine Fragen zu antworten und dir beim Lernen zu helfen.
+          Denke daran, dass die Bots auf Algorithmen basieren und Fehler machen können.
+        </p>
+        {user ? (
+          isAllowed ? (
+            <>
+              <p className="text-center m-4 pb-8">Was möchtest du heute tun? Wie kann ich dir beim Lernen helfen?</p>
+              <div className="flex flex-wrap justify-center items-center bg-white">
+                {experts.map((expert, index) => (
+                  <div key={index} className="p-4 m-4 rounded-lg cursor-pointer w-80 min-h-80" onClick={() => startChatWithExpert(expert)}>
+                    <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mx-auto"/>
+                    <h3 className="mt-4 text-lg font-bold text-center">{expert.name}</h3>
+                    <p className="text-sm text-center">{expert.description}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </>
+          ) : (
+            <div className="flex flex-col items-center mt-8 px-4 text-center">
+            <ExclamationTriangleIcon className="h-12 w-12 text-red-500 mb-4"/>
+            <p className="text-lg font-bold mb-8">Dieser Chatbot darf nur durch Personen der Stadtschulen Zug benutzt werden.</p>
+            <UserButton />   
           </div>
-        </>
-      ) : (
-        <>
-          <p className="text-center m-4 pb-8">Melde dich über das Microsoft-Logo an, um zu beginnen.</p>
-          <UserButton />
-        </>
-      )}
-      <p className="text-center my-16 max-w-2xl">
-        Wenn du mehr darüber erfahren willst, wie unsere Bots funktionieren, findest du
-        <Link href="/about" className="text-blue-600 visited:text-purple-600"> hier </Link>
-        weitere Informationen.
-      </p>
+            )
+        ) : (
+          <>
+            <p className="text-center m-4 pb-8">Melde dich über das Microsoft-Logo an, um zu beginnen.</p>
+            <UserButton />
+          </>
+        )}
+        <p className="text-center my-16 max-w-2xl">
+          Wenn du mehr darüber erfahren willst, wie unsere Bots funktionieren, findest du
+          <Link href="/about" className="text-blue-600 visited:text-purple-600"> hier </Link>
+          weitere Informationen.
+        </p>
+      </div>
     </div>
-  </div>
-);
-
-  
+  );
 }
