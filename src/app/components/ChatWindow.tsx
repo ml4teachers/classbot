@@ -29,7 +29,7 @@ export default function ChatWindow() {
   // const { updateTokens } = useTokens();
 
 
-  // Autoscroll zum neuesten Nachricht
+  // Autoscroll zur neuesten Nachricht
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -45,7 +45,7 @@ export default function ChatWindow() {
   // Chat-Optionen für ai/react nutzen, inklusive handleFinish
   const chatOptions: UseChatOptions = {
     id: chatId,
-    onFinish: handleFinish,
+    // onFinish: handleFinish,
     initialMessages: expert ? [
       {id: chatId, content: expert.initialPrompt, role: 'user', createdAt: new Date() },
       {id: chatId, content: expert.initialAnswer, role: 'assistant', createdAt: new Date() }
@@ -70,27 +70,27 @@ export default function ChatWindow() {
   }, [messages]);
 
   // Speichert Nachrichten nach Abschluss der Chatbot-Antwort
-  async function handleFinish(message: any) {
-    const messagesToSave = [
-      { chatId, text: input, role: 'user' },
-      { chatId, text: message.content, role: 'assistant' },
-    ];
-    await saveMessages(messagesToSave);
-    // await updateTokens();
-  }
+  // async function handleFinish(message: any) {
+  //   const messagesToSave = [
+  //     { chatId, text: input, role: 'user' },
+  //     { chatId, text: message.content, role: 'assistant' },
+  //   ];
+  //   await saveMessages(messagesToSave);
+  //   // await updateTokens();
+  // }
 
   // Speichert Nachrichten in der Datenbank
-  async function saveMessages(messages: any[]) {
-    try {
-      await fetch('/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(messages),
-      });
-    } catch (error) {
-      console.error('Fehler beim Speichern der Nachrichten:', error);
-    }
-  }
+  // async function saveMessages(messages: any[]) {
+  //   try {
+  //     await fetch('/api/messages', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(messages),
+  //     });
+  //   } catch (error) {
+  //     console.error('Fehler beim Speichern der Nachrichten:', error);
+  //   }
+  // }
 
   const handleSendImage = (imageMessage: any) => {
     console.log('Image Message:', imageMessage);

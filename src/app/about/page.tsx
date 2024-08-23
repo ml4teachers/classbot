@@ -28,7 +28,7 @@ const AboutPage = () => {
           eine andere vertrauenswürdige Person.
         </p>
         <p className="mt-4 font-bold">Deine Privatsphäre ist uns wichtig. Teile keine persönlichen Daten mit den Bots.
-        Alle deine Eingaben werden auf unseren Servern abgespeichert und können durch die Entwickler eingesehen werden.</p>
+        Deine Eingaben und die Antworten der Bots werden nicht auf unseren Servern gespeichert. Dennoch findet eine Verarbeitung der Daten statt, um dir in Echtzeit passende Antworten zu geben. Diese Verarbeitung erfolgt ausschliesslich während deiner Sitzung und es werden keine Daten dauerhaft gespeichert oder weitergegeben.</p>
         <p className="mt-4 mb-16">
           Wir laden dich ein, die Möglichkeiten zu entdecken, die unsere Bots bieten, aber erinnern dich daran, dass 
           die Technologie als Werkzeug zu betrachten ist, dessen Ergebnisse stets hinterfragt werden sollten.
