@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
 const CreateBotPage = () => {
@@ -16,26 +16,24 @@ const CreateBotPage = () => {
 
   const router = useRouter();
   const supabase = createClient();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const now = new Date();
     setStartTime(now.toISOString().slice(0, 16));
     setMinStartTime(now.toISOString().slice(0, 16));
 
-    if (searchParams) {
-      const editParam = searchParams.get('edit');
-      if (editParam) {
-        const botData = JSON.parse(decodeURIComponent(editParam));
-        setName(botData.name);
-        setDescription(botData.description);
-        setInitialPrompt(botData.initialPrompt);
-        setInitialAnswer(botData.initialAnswer);
-        setStartTime(new Date(botData.startTime).toISOString().slice(0, 16));
-        setDuration(Math.ceil((new Date(botData.expiration).getTime() - new Date(botData.startTime).getTime()) / (1000 * 60 * 60)));
-      }
+    const searchParams = new URLSearchParams(window.location.search);
+    const editParam = searchParams.get('edit');
+    if (editParam) {
+      const botData = JSON.parse(decodeURIComponent(editParam));
+      setName(botData.name);
+      setDescription(botData.description);
+      setInitialPrompt(botData.initialPrompt);
+      setInitialAnswer(botData.initialAnswer);
+      setStartTime(new Date(botData.startTime).toISOString().slice(0, 16));
+      setDuration(Math.ceil((new Date(botData.expiration).getTime() - new Date(botData.startTime).getTime()) / (1000 * 60 * 60)));
     }
-  }, [searchParams]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
