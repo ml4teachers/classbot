@@ -21,12 +21,19 @@ interface Expert {
   voice: string;
 }
 
+interface CustomBot extends Expert {
+  id: string;
+  createdAt: string;
+  expiration: string;
+}
+
 export default function LandingPage() {
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [isAllowed, setIsAllowed] = useState<boolean>(false);
   const router = useRouter();
   const [experts, setExperts] = useState<Expert[]>([]);
+  const [customBots, setCustomBots] = useState<CustomBot[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -35,7 +42,7 @@ export default function LandingPage() {
       if (loggedInUser) {
         const email = loggedInUser.email;
         if (email) {
-          const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch'];
+          const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch', '@phlu.ch'];
           const domain = email.substring(email.lastIndexOf('@'));
           setIsAllowed(allowedDomains.includes(domain));
         }
@@ -63,18 +70,76 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
+    // Laden der vordefinierten Experten
     if (typeof window !== 'undefined') {
       fetch('/experts.json')
         .then((response) => response.json())
         .then((data) => setExperts(data));
     }
+
+    // Laden der benutzerdefinierten Bots
+    const fetchCustomBots = async () => {
+      const now = new Date().toISOString();
+      const { data, error } = await supabase
+        .from('Chat')
+        .select('*')
+        .lte('startTime', now)  // startTime ist in der Vergangenheit oder jetzt
+        .gt('expiration', now)  // expiration ist in der Zukunft
+        .order('createdAt', { ascending: false });
+
+      if (error) {
+        console.error('Fehler beim Laden der benutzerdefinierten Bots:', error);
+      } else {
+        setCustomBots(data as CustomBot[]);
+      }
+    };
+
+    fetchCustomBots();
   }, []);
 
-  const startChatWithExpert = (expert: Expert) => {
+  const startChatWithExpert = (expert: Expert | CustomBot) => {
     const chatId = uuidv4();
     localStorage.setItem('selectedExpert', JSON.stringify(expert));
     router.push(`/chats/${chatId}`);
   };
+
+  const handleEdit = async (bot: CustomBot) => {
+    // Bot löschen
+    const { error } = await supabase
+      .from('Chat')
+      .delete()
+      .match({ id: bot.id });
+
+    if (error) {
+      console.error('Fehler beim Löschen des Bots:', error);
+      alert('Fehler beim Bearbeiten des Bots. Bitte versuchen Sie es erneut.');
+      return;
+    }
+
+    // Zur Bearbeitungsseite navigieren
+    router.push(`/create?edit=${encodeURIComponent(JSON.stringify(bot))}`);
+  };
+
+  const renderExpertCard = (expert: Expert | CustomBot, index: number) => (
+    <div key={index} className="p-4 m-4 cursor-pointer w-80 min-h-80 bg-white">
+      <div onClick={() => startChatWithExpert(expert)}>
+        <img src={expert.imageUrl || '/custom.png'} alt={expert.name} className="w-32 h-32 mx-auto"/>
+        <h3 className="mt-4 text-lg font-bold text-center">{expert.name}</h3>
+        <p className="text-sm text-center">{expert.description}</p>
+      </div>
+      {'userId' in expert && expert.userId === user?.id && (
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEdit(expert as CustomBot);
+          }}
+          className="mt-4 w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Bearbeiten
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <div>
@@ -89,14 +154,9 @@ export default function LandingPage() {
           isAllowed ? (
             <>
               <p className="text-center m-4 pb-8">Was möchtest du heute tun? Wie kann ich dir beim Lernen helfen?</p>
-              <div className="flex flex-wrap justify-center items-center bg-white">
-                {experts.map((expert, index) => (
-                  <div key={index} className="p-4 m-4 rounded-lg cursor-pointer w-80 min-h-80" onClick={() => startChatWithExpert(expert)}>
-                    <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mx-auto"/>
-                    <h3 className="mt-4 text-lg font-bold text-center">{expert.name}</h3>
-                    <p className="text-sm text-center">{expert.description}</p>
-                  </div>
-                ))}
+              <div className="flex flex-wrap justify-center items-center">
+                {experts.map((expert, index) => renderExpertCard(expert, index))}
+                {customBots.map((bot, index) => renderExpertCard({...bot, voice: 'nova', imageUrl: '/custom.png'}, experts.length + index))}
               </div>
             </>
           ) : (

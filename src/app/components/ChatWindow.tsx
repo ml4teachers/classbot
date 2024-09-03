@@ -106,7 +106,10 @@ export default function ChatWindow() {
           {expert.name === 'Code' ? (
             <ImageUpload onSendImage={handleSendImage} />
           ) : (
-            <img src={expert.imageUrl} alt={expert.name} className="w-32 h-32 mt-16 mx-auto" />
+            <div>
+              <img src={expert.imageUrl} alt={expert.name} className="w-16 h-16 mt-16 mx-auto" />
+              <h3 className="mt-4 text-lg font-bold text-center">{expert.name}</h3>
+            </div>
           )}
         </>
       )}
