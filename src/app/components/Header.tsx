@@ -38,11 +38,8 @@ const Header: React.FC = () => {
 
   const isChatActive = pathname && pathname.includes('/chats/');
   const isCreatePage = pathname === '/create';
-  const isAuthorizedUser = user?.email && (
-    user.email.includes('@phzg') ||
-    user.email.includes('@stadtschulenzug') ||
-    user.email.includes('@phlu.ch')
-  );
+  const canCreateBot = user?.email && !user.email.includes('@zugerklassen.ch');
+
 
   return (
     <div className="fixed bg-white h-14 w-full flex items-center px-4 shadow-md z-10">
@@ -59,7 +56,7 @@ const Header: React.FC = () => {
           Bot wechseln
         </button>
       )}
-      {isAuthorizedUser && !isCreatePage && (
+      {canCreateBot && !isCreatePage && (
         <button
           onClick={() => router.push('/create')}
           className="text-sm sm:block mr-6 text-slate-500 hover:text-slate-800"

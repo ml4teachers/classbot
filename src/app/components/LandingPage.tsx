@@ -35,17 +35,41 @@ export default function LandingPage() {
   const [experts, setExperts] = useState<Expert[]>([]);
   const [customBots, setCustomBots] = useState<CustomBot[]>([]);
 
+  const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch', '@schule-oberaegeri.ch', '@oberaegeri.ch'];
+
   useEffect(() => {
+    const checkUserAccess = async (loggedInUser: User | null) => {
+      if (!loggedInUser?.email) return;
+
+      const email = loggedInUser.email;
+      const domain = email.substring(email.lastIndexOf('@'));
+
+      // Zuerst überprüfen, ob die E-Mail-Domäne erlaubt ist
+      if (allowedDomains.includes(domain)) {
+        setIsAllowed(true);
+        return;
+      }
+
+      // Wenn die Domäne nicht erlaubt ist, prüfen, ob die E-Mail in der Supabase-Datenbank enthalten ist
+      const { data, error } = await supabase
+        .from('AllowedEmails')
+        .select('email')
+        .eq('email', email);
+
+      if (error) {
+        console.error('Fehler beim Überprüfen der E-Mail:', error);
+        return;
+      }
+
+      // Setze isAllowed basierend darauf, ob die E-Mail in der Tabelle vorhanden ist
+      setIsAllowed(data?.length > 0);
+    };
+
     supabase.auth.getSession().then(({ data }) => {
       const loggedInUser = data.session?.user || null;
       setUser(loggedInUser);
       if (loggedInUser) {
-        const email = loggedInUser.email;
-        if (email) {
-          const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch', '@phlu.ch'];
-          const domain = email.substring(email.lastIndexOf('@'));
-          setIsAllowed(allowedDomains.includes(domain));
-        }
+        checkUserAccess(loggedInUser);
       }
     });
 
@@ -54,12 +78,7 @@ export default function LandingPage() {
         const loggedInUser = session?.user || null;
         setUser(loggedInUser);
         if (loggedInUser) {
-          const email = loggedInUser.email;
-          if (email) {
-            const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch'];
-            const domain = email.substring(email.lastIndexOf('@'));
-            setIsAllowed(allowedDomains.includes(domain));
-          }
+          checkUserAccess(loggedInUser);
         }
       }
     );
