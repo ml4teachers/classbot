@@ -6,7 +6,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import RecordButton from './RecordButton';
 import Link from 'next/link';
 
-const schimpfwortliste = ['assi', 'hitler', 'anal', 'missi', 'arsch', 'möse', 'bastard', 'mutterficker', 'bimbo', 'homo', 'tunte', 'assel', 'cock', 'nigger', 'neger', 'mongo', 'fick', 'ficken', 'hure', 'hurensohn'];
+const schimpfwortliste = ['assi', 'anal', 'missi', 'arsch', 'möse', 'bastard', 'mutterficker', 'bimbo', 'homo', 'tunte', 'assel', 'cock', 'nigger', 'neger', 'mongo', 'fick', 'ficken', 'hure', 'hurensohn'];
 
 interface InputBarProps {
   input: string;
