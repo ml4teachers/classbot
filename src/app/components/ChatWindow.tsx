@@ -8,8 +8,11 @@ import MessageBubble from './MessageBubble';
 import InputBar from './InputBar';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import ImageUpload from './ImageUpload';
+import { createClient } from "@/utils/supabase/client";
+import { User } from '@supabase/supabase-js';
+
 // import { useTokens } from '../context/TokensContext';
 
 
@@ -26,8 +29,67 @@ export default function ChatWindow() {
   const pathname = usePathname();
   const chatId = pathname && pathname.split('/').pop() || uuidv4();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   // const { updateTokens } = useTokens();
 
+  // Zugangscode aus LocalStorage
+  const accessCode = typeof window !== 'undefined' ? localStorage.getItem('accessCode') : null;
+
+  useEffect(() => {
+    const validateAccessCode = async () => {
+      if (accessCode) {
+        try {
+          const { data, error } = await supabase
+            .from('access_codes')
+            .select('*')
+            .eq('code', accessCode)
+            .gte('expires_at', new Date().toISOString())
+            .single();
+
+          if (error || !data) {
+            console.warn('Ungültiger oder abgelaufener Zugangscode.');
+            localStorage.removeItem('accessCode');
+            setIsAuthorized(false);
+          } else if (data.current_users < data.max_users) {
+            setIsAuthorized(true);
+          } else {
+            console.warn('Maximale Anzahl von Nutzer:innen erreicht.');
+            localStorage.removeItem('accessCode');
+            setIsAuthorized(false);
+          }
+        } catch (err) {
+          console.error('Fehler bei der Prüfung des Zugangscodes:', err);
+          setIsAuthorized(false);
+        }
+      }
+    };
+
+    validateAccessCode();
+  }, [accessCode]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setUser(session?.user || null);
+        if (session) {
+          setIsAuthorized(true)
+        } else {
+          setIsAuthorized(false)
+        }
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   // Autoscroll zur neuesten Nachricht
   const scrollToBottom = () => {
@@ -97,6 +159,24 @@ export default function ChatWindow() {
     setMessages(imageMessage);
     handleSubmit({ preventDefault: () => {} } as any);  // Simuliert einen Submit Event
   };
+
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center px-4">
+        <h1 className="text-2xl font-bold mb-4">Zugriff verweigert</h1>
+        <p className="mb-6">
+          Du hast keinen Zugriff auf diesen Chat. Bitte melde dich an oder verwende einen gültigen Zugangscode.
+        </p>
+        <button
+          onClick={() => router.push('/')}
+          className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+        >
+          Zurück zur Startseite
+        </button>
+      </div>
+    );
+  }
 
 
   return (

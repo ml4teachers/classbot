@@ -56,13 +56,21 @@ const Header: React.FC = () => {
           Bot wechseln
         </button>
       )}
-      {canCreateBot && !isCreatePage && (
-        <button
-          onClick={() => router.push('/create')}
-          className="text-sm sm:block mr-6 text-slate-500 hover:text-slate-800"
-        >
-          Bot erstellen
-        </button>
+      {canCreateBot && (
+        <>
+          <button
+            onClick={() => router.push('/access-codes')}
+            className="text-sm sm:block mr-6 text-slate-500 hover:text-slate-800"
+          >
+            Zugangscodes
+          </button>
+          <button
+            onClick={() => router.push('/custom-bots')}
+            className="text-sm sm:block mr-6 text-slate-500 hover:text-slate-800"
+          >
+            CustomBots
+          </button>
+        </>
       )}
       { // user && totalTokens !== undefined &&
         // <div className="hidden text-sm sm:block mr-6 text-slate-500">Gebrauchte Tokens: {totalTokens}</div>
