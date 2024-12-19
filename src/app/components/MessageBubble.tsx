@@ -48,7 +48,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                 className="w-7 h-7 cursor-pointer mt-1 text-gray-300 p-1 hover:text-gray-500"
               />
             )}
-            <SpeakerButton textToSpeak={text} />
+            {// <SpeakerButton textToSpeak={text} />
+            }
           </div>
         </div>
       </div>

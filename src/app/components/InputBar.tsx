@@ -98,7 +98,7 @@ const InputBar: React.FC<InputBarProps> = ({
           <textarea
             ref={textareaRef}
             rows={1}
-            className="flex-1 resize-none ml-4 my-3 overflow-y-scroll max-h-96 focus:outline-none"
+            className="flex-1 resize-none mr-1 ml-4 my-3 overflow-y-scroll max-h-96 focus:outline-none"
             placeholder="Schreibe eine Nachricht..."
             value={input}
             onChange={handleInputChange}
@@ -109,9 +109,11 @@ const InputBar: React.FC<InputBarProps> = ({
               }
             }}
           />
-          <div className="flex items-center">
-            <RecordButton onAudioRecorded={handleAudioTranscription} />
-          </div>
+          {
+          // <div className="flex items-center">
+             // <RecordButton onAudioRecorded={handleAudioTranscription} />
+          // </div>
+          }
           {input.length > 0 &&
           <button type="submit" className="m-1 p-2 rounded-full flex-shrink-0 text-gray-500 hover:text-gray-700 hover:bg-slate-200 justify-end">
             <PaperAirplaneIcon className="w-6 h-6" />
