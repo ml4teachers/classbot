@@ -32,7 +32,7 @@ const AccessCodeDropdown: React.FC<AccessCodeDropdownProps> = ({ selectedCode, o
 
         if (error) throw error;
 
-        setAccessCodes(data?.map((entry) => entry.code) || []);
+        setAccessCodes(data?.map((entry) => entry.code).filter(Boolean) || []);
       } catch (error) {
         console.error('Fehler beim Laden der Zugangscodes:', error);
       } finally {
@@ -58,13 +58,14 @@ const AccessCodeDropdown: React.FC<AccessCodeDropdownProps> = ({ selectedCode, o
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="open">Offen für alle</SelectItem>
-            {accessCodes.map((code) => (
-              <SelectItem key={code} value={code}>
-                {code}
-              </SelectItem>
-            ))}
-            {accessCodes.length === 0 && (
-              <SelectItem value="" disabled>
+            {accessCodes.length > 0 ? (
+              accessCodes.map((code) => (
+                <SelectItem key={code} value={code}>
+                  {code}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="no-codes" disabled>
                 Keine Zugangscodes gefunden
               </SelectItem>
             )}

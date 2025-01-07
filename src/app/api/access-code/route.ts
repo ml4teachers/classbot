@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
 export async function POST(req: NextRequest) {
-  const supabase = createClient();
+  // Warte darauf, dass der Client erstellt wird
+  const supabase = await createClient();
 
   try {
     const { code } = await req.json();
@@ -28,14 +29,14 @@ export async function POST(req: NextRequest) {
 
     // Aktualisiere die Anzahl der aktuellen Nutzer:innen
     const { error: updateError } = await supabase
-  .from('access_codes')
-  .update({ current_users: data.current_users + 1 })
-  .eq('id', data.id);
+      .from('access_codes')
+      .update({ current_users: data.current_users + 1 })
+      .eq('id', data.id);
 
-  if (updateError) {
-    console.error('Fehler beim Aktualisieren von current_users:', updateError);
-    return NextResponse.json({ message: 'Fehler beim Aktualisieren des Zugangscodes.' }, { status: 500 });
-  }
+    if (updateError) {
+      console.error('Fehler beim Aktualisieren von current_users:', updateError);
+      return NextResponse.json({ message: 'Fehler beim Aktualisieren des Zugangscodes.' }, { status: 500 });
+    }
 
     return NextResponse.json({ message: 'Zugangscode erfolgreich aktiviert.' }, { status: 200 });
   } catch (err) {
