@@ -89,7 +89,6 @@ export default function CustomBotsPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Beschreibung</TableHead>
-                  <TableHead>Zugangscode</TableHead>
                   <TableHead className="text-center">Aktionen</TableHead>
                 </TableRow>
               </TableHeader>
@@ -98,12 +97,11 @@ export default function CustomBotsPage() {
                   <TableRow key={bot.id}>
                     <TableCell>{bot.name}</TableCell>
                     <TableCell>{bot.description}</TableCell>
-                    <TableCell>{bot.accessCode || 'Offen für alle'}</TableCell>
                     <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="sm" className="w-full">
-                            Aktionen
+                            Bearbeiten
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
