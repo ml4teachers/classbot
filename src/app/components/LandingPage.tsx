@@ -37,7 +37,7 @@ export default function LandingPage() {
   const [isAccessGranted, setIsAccessGranted] = useState(false);
 
   const allowedDomains = ['@stadtschulenzug.ch', '@zugerklassen.ch', '@phzg.ch', '@schule-oberaegeri.ch', 
-    '@schulen-unteraegeri.ch', 'schulen-huenenberg.ch', '@schulenrisch.ch', '@schulen-steinhausen.ch,', '@schulen-baar.ch', '@schulen-cham.ch'];
+    '@schulen-unteraegeri.ch', '@schulen-huenenberg.ch', '@schulenrisch.ch', '@schulen-steinhausen.ch,', '@schulen-baar.ch', '@schulen-cham.ch'];
 
   // Zugangscode aus LocalStorage
   const accessCode = typeof window !== 'undefined' ? localStorage.getItem('accessCode') : null;
