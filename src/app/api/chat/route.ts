@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
  
   const response = await openai.chat.completions.create({
-    model: 'gpt-4.1-nano',
+    model: 'gpt-5-nano',
     stream: true,
     messages,
   });
